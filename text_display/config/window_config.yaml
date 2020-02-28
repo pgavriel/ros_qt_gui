@@ -1,0 +1,12 @@
+# Window Properties
+window_x: 800
+window_y: 200
+window_width: 800
+window_height: 800
+
+font_size: 36
+
+# Colors
+text: [245,245,245]
+background: [0,0,0]
+border: [0,0,0]

@@ -1,0 +1,16 @@
+<launch>
+  <rosparam command="load" file="$(find text_display)/config/window_config.yaml" />
+
+  <arg name="topic" default="text_display" />
+  <arg name="init_message" default="Welcome." />
+  <arg name="fancy_draw" default="true" />
+  <arg name="draw_delay" default="20" />
+
+  <node name="text_display" pkg="text_display" type="text_display" output="screen">
+    <param name="topic" value="$(arg topic)" />
+    <param name="init_message" value="$(arg init_message)" />
+    <param name="fancy" value="$(arg fancy_draw)" />
+    <param if="$(arg fancy_draw)" name="draw_delay" value="$(arg draw_delay)" />
+  </node>
+
+</launch>

@@ -1,20 +1,5 @@
-/**
- * @file /include/participant_display/qnode.hpp
- *
- * @brief Communications central!
- *
- * @date February 2011
- **/
-/*****************************************************************************
-** Ifdefs
-*****************************************************************************/
-
 #ifndef text_display_QNODE_HPP_
 #define text_display_QNODE_HPP_
-
-/*****************************************************************************
-** Includes
-*****************************************************************************/
 
 // To workaround boost/qt4 problems that won't be bugfixed. Refer to
 //    https://bugreports.qt.io/browse/QTBUG-22829
@@ -27,16 +12,7 @@
 #include <QThread>
 #include <QStringListModel>
 
-
-/*****************************************************************************
-** Namespaces
-*****************************************************************************/
-
 namespace text_display {
-
-/*****************************************************************************
-** Class
-*****************************************************************************/
 
 class QNode : public QThread {
     Q_OBJECT
@@ -46,9 +22,7 @@ public:
 	bool init();
 	void run();
 
-	/*********************
-	** Logging
-	**********************/
+	// Logging
 	enum LogLevel {
 	         Debug,
 	         Info,
@@ -59,24 +33,28 @@ public:
 
    QStringListModel* loggingModel() { return &logging_model; }
    void log( const LogLevel &level, const std::string &msg);
+
+   // Subscriber callback function
    void displayCallback(const std_msgs::String::ConstPtr& msg);
 
 
 Q_SIGNALS:
 	void loggingUpdated();
-  void message_recieved(QString msg);
   void rosShutdown();
+
+  // Sends the message to the main_window to be drawn.
+  void message_recieved(QString msg);
 
 private:
 	int init_argc;
 	char** init_argv;
-	ros::Publisher chatter_publisher;
-  ros::Subscriber topic_listener;
   QStringListModel logging_model;
-  std::string message;
-  std::string topic;
-  ros::NodeHandle node_handle;
 
+  ros::NodeHandle node_handle;
+  ros::Subscriber topic_listener;
+
+  std::string topic;
+  std::string message;
 };
 
 }  // namespace text_display

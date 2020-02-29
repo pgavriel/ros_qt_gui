@@ -1,10 +1,11 @@
 <launch>
+  <!-- Contains window paramters like position, size, colors, and text size. -->
   <rosparam command="load" file="$(find text_display)/config/window_config.yaml" />
 
-  <arg name="topic" default="text_display" />
-  <arg name="init_message" default="Welcome." />
-  <arg name="fancy_draw" default="true" />
-  <arg name="draw_delay" default="20" />
+  <arg name="topic" default="text_display" />   <!-- Topic to subcribe to for messages -->
+  <arg name="init_message" default="Welcome." /><!-- Initial message to show. -->
+  <arg name="fancy_draw" default="true" />      <!-- If enabled, will animate text. If disabled, messages will be drawn instantly -->
+  <arg name="draw_delay" default="20" />        <!-- If fancy_draw enabled, delay in ms between drawing characters -->
 
   <node name="text_display" pkg="text_display" type="text_display" output="screen">
     <param name="topic" value="$(arg topic)" />

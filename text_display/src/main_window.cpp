@@ -6,33 +6,31 @@
 #include <sstream>
 #include "../include/text_display/main_window.hpp"
 
-//Namespaces
 namespace text_display {
 
 using namespace Qt;
 
-/*****************************************************************************
-** Implementation [MainWindow]
-*****************************************************************************/
-
 MainWindow::MainWindow(int argc, char** argv, ros::NodeHandle n, QWidget *parent)
-	: QMainWindow(parent)
-	, qnode(argc,argv,n)
+	: QMainWindow(parent) // Instantiate QMainWindow
+	, qnode(argc,argv,n)  // Instantiate QNode (with NodeHandle)
 {
 	ui.setupUi(this); // Calling this incidentally connects all ui's triggers to on_...() callbacks in this class.
 	setWindowIcon(QIcon(":/images/icon.png"));
 
-  QObject::connect(&qnode, SIGNAL(rosShutdown()), this, SLOT(close()));
+	// Connect QNode's message signal the main_windows new_message SLOT
 	QObject::connect(&qnode, SIGNAL(message_recieved(QString)), this, SLOT(new_message(QString)));
+  QObject::connect(&qnode, SIGNAL(rosShutdown()), this, SLOT(close()));
 
 	if ( !qnode.init() ) {
 		showNoMasterMessage();
 	}
 
+	// Set up GUI based on launch parameters.
 	this->node_handle = n;
 	applyWindowParams();
 	ros::Duration(0.5).sleep();
 
+	// Defaults
 	this->fancy_draw = true;
 	this->draw_delay = 20;
 	this->init_message = "Welcome.";
@@ -40,11 +38,13 @@ MainWindow::MainWindow(int argc, char** argv, ros::NodeHandle n, QWidget *parent
 	n.getParam(ros::this_node::getName()+"/fancy",this->fancy_draw);
 	n.getParam(ros::this_node::getName()+"/draw_delay",this->draw_delay);
 	n.getParam(ros::this_node::getName()+"/init_message",this->init_message);
-	ROS_INFO("[FROM MAIN WINDOW]\nInitMessage:\t%s\nFancyDraw:\t%s\nDrawDelay:\t%d",
+	ROS_INFO("\n[FROM MAIN WINDOW]\nInitMessage:\t%s\nFancyDraw:\t%s\nDrawDelay:\t%d",
 						this->init_message.c_str(),(this->fancy_draw?"ENABLED":"DISABLED"),this->draw_delay);
 	ui.label->setText(this->init_message.c_str());
 	last_msg = ui.label->text().toStdString();
 	drawing = false;
+
+	// GUI is now set up and waiting to recieve message signals from QNode
 }
 
 MainWindow::~MainWindow() {
@@ -57,6 +57,8 @@ MainWindow::~MainWindow() {
 }
 void MainWindow::applyWindowParams(){
 	ros::NodeHandle n = this->node_handle;
+
+	// SET WINDOW POSITION AND SIZE ----------------------------------------------
 	if(n.hasParam("window_width")){
 		int width;
 		n.getParam("window_width",width);
@@ -78,6 +80,7 @@ void MainWindow::applyWindowParams(){
 		QMainWindow::move(QMainWindow::x(),y);
 	}
 
+	// SET FONT SIZE -------------------------------------------------------------
 	if(n.hasParam("font_size")){
 		int size;
 		n.getParam("font_size",size);
@@ -86,6 +89,16 @@ void MainWindow::applyWindowParams(){
 		ui.label->setFont(labelfont);
 	}
 
+	// SET COLORS ----------------------------------------------------------------
+	// NOTE: The process for setting colors is more complicated because it's defined
+	//			 in the widgets stylesheet which is a string containing multiple properties
+	// 			 separated by a ';'. So we must:
+	// 			 1. Recieve our color and generate our string for the parameter we want set.
+	//			 2. Split the existing stylesheet into a list of the property strings.
+	//			 3. In that list, find the one we want to set and replace it with the string we generated.
+	// 			 4. Recombine the properties into one long string and set the stylesheet of the widget.
+	// NOTE: It is likely that there is a better way. (QPallete?)
+	// LABEL TEXT COLOR
 	if(n.hasParam("text")){
 		std::vector<int> color;
 		color.resize(3);
@@ -94,20 +107,24 @@ void MainWindow::applyWindowParams(){
 		std::stringstream new_color;
 		new_color << "color: rgb(" << color[0] << ", " << color[1] << ", " << color[2] << ")";
 		QStringList properties = ui.label->styleSheet().split(";");
+	  // Find the property we want to change and replace it with our string.
 		for(int i = 0 ; i < properties.size() ; i++){
 			if(properties.at(i).startsWith("color:")){
 				properties.replace(i,new_color.str().c_str());
 				break;
 			}
-			ROS_INFO("%d - %s",i+1,properties.at(i).toLocal8Bit().constData());
 		}
+		// Recombine properties into QString
 		QString newstylesheet;
 		for(int i = 0 ; i < properties.size()-1 ; i++){
 			newstylesheet.append(properties.at(i));
 			newstylesheet.append(";");
 		}
+		// Set new StyleSheet
 		ui.label->setStyleSheet(newstylesheet);
 	}
+
+	// LABEL BACKGROUND COLOR
 	if(n.hasParam("background")){
 		std::vector<int> color;
 		color.resize(3);
@@ -116,26 +133,33 @@ void MainWindow::applyWindowParams(){
 		std::stringstream new_color;
 		new_color << "background-color: rgb(" << color[0] << ", " << color[1] << ", " << color[2] << ")";
 		QStringList properties = ui.label->styleSheet().split(";");
+		// Find the property we want to change and replace it with our string.
 		for(int i = 0 ; i < properties.size() ; i++){
 			if(properties.at(i).startsWith("background-color:")){
 				properties.replace(i,new_color.str().c_str());
 				break;
 			}
-			ROS_INFO("%d - %s",i+1,properties.at(i).toLocal8Bit().constData());
 		}
+		// Recombine properties into QString
 		QString newstylesheet;
 		for(int i = 0 ; i < properties.size()-1 ; i++){
 			newstylesheet.append(properties.at(i));
 			newstylesheet.append(";");
 		}
+		// Set new StyleSheet
 		ui.label->setStyleSheet(newstylesheet);
 	}
+	// BORDER COLOR
+	// In the case of border, what we're actually doing is setting the background color
+	// of the centralwidget that contains our label, and luckily in this case it's
+	// stylesheet only has one property so theres no need to search.
 	if(n.hasParam("border")){
 		std::vector<int> color;
 		color.resize(3);
 		n.getParam("border",color);
 		std::stringstream new_color;
 		new_color << "background-color: rgb(" << color[0] << ", " << color[1] << ", " << color[2] << ")";
+		// Set new StyleSheet
 		ui.centralwidget->setStyleSheet(QString::fromUtf8(new_color.str().c_str()));
 	}
 }
@@ -156,6 +180,7 @@ void MainWindow::showNoMasterMessage() {
 }
 
 void MainWindow::new_message(QString msg) {
+	// Don't allow message drawing to be interrupted.
 	if (drawing){
 		ROS_INFO("MESSAGE RECIEVED WHILE DRAWING, IGNORING.\n");
 		return;
@@ -163,10 +188,10 @@ void MainWindow::new_message(QString msg) {
 	drawing = true;
 	char cursor = '_';
 	std::string fancy = "";
-	std::string message = msg.toStdString();
+	std::string message = msg.toStdString(); // Message recieved
 
 	ROS_INFO("MAIN WINDOW RECIEVED: %s",message.c_str());
-
+ 
 	if(this->fancy_draw){
 		//If recieved message is the same as the last one, ignore it (don't redraw).
 		ROS_INFO("LAST MESSAGE: %s",last_msg.c_str());

@@ -3,13 +3,11 @@
 #include <QApplication>
 #include "../include/text_display/main_window.hpp"
 
-/*****************************************************************************
-** Main
-*****************************************************************************/
 
 int main(int argc, char **argv) {
 
     //ROS
+    //NOTE: This NodeHandle is sent to MainWindow, and subsequently sent to QNode
     ros::init(argc,argv,"text_display");
     ros::NodeHandle n;
     if ( ! ros::master::check() ) {

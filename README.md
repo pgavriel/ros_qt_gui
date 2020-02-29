@@ -15,7 +15,7 @@ Install all of the ROS QT packages, which likely includes some that are unnecess
 
 ### Packages
 #### text_display  
-![text_display Welcome message](.resources/text_display1.png)
+![text_display Welcome message](.resources/text_display1.png)  
 **Function:**  
 The text_display packages is a very simple type of GUI, it's only function is to listen on a given ROS topic for a message string, and then displays any messages it receives (centered in the window and with the desired font size). Text_display has a setting named *fancy_draw* which, if enabled, will animate the messages being displayed. If fancy_draw is disabled, messages will appear immediately.
 

@@ -7,20 +7,20 @@ This repository contains various ROS packages that are examples of functional GU
 [Qt Reference](https://doc.qt.io/qt-5/reference-overview.html)  
 [Qt Examples And Tutorials](https://doc.qt.io/qt-5/qtexamplesandtutorials.html)  
 
-### Setup  
+## Setup  
 Install all of the ROS QT packages, which likely includes some that are unnecessary, but enough of them are needed to justify doing it this way for the sake of simplicity:
 
 > sudo apt-get install ros-kinetic-qt-*  
 
-Then, clone this repository to your ROS workspace and build the packages within.  
+Then, clone this repository to your ROS workspace src folder and build the packages within.  
 
-### Packages
-#### text_display  
+## Packages
+### text_display  
 ![text_display Welcome message](.resources/text_display1.png)  
 > roslaunch text_display text_display.launch   
 
 **Function:**  
-The text_display packages is a very simple type of GUI, it's only function is to listen on a given ROS topic for a message string, and then displays any messages it receives (centered in the window and with the desired font size). Text_display has a setting named *fancy_draw* which, if enabled, will animate the messages being displayed. If fancy_draw is disabled, messages will appear immediately. **TIP:** You can use '<br>' within your messages to act as a newline character.  
+The text_display packages is a very simple type of GUI, it's only function is to listen on a given ROS topic for a message string, and then displays any messages it receives (centered in the window and with the desired font size). Text_display has a setting named *fancy_draw* which, if enabled, will animate the messages being displayed. If fancy_draw is disabled, messages will appear immediately. **TIP:** You can use `<br>` within your messages to act as a newline character.  
 
 **Use Cases:**  
 This package may be useful for HRI studies where you need to display text to a participant based on what the robot is doing.  
@@ -32,7 +32,7 @@ More generally, it might be useful for displaying a robots internal status and d
 * How to programmatically set Window properties like position, size, colors, and font size  
 * How to use QTime to implement a simple delay function  
 
-#### button_controller  
+### button_controller  
 ![button_controller GUI](.resources/button_controller1.png)  
 > roslaunch button_controller button_controller.launch   
 
@@ -52,7 +52,7 @@ Between the directional and grid controls, this GUI could be used almost any tim
 * How to set and receive parameters from a .launch file as well as .yaml files  
 * How to programmatically set Window properties like position and size   
 
-#### blank_slate  
+### blank_slate  
 > rosrun blank_slate_gui blank_slate  
 
 **Function:**  

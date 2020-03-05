@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>blank_slate_gui</name>
+  <version>0.1.0</version>
+  <description>
+    An empty GUI application that will build successfully after pasting a new GUI
+    into the .ui file without having to make any code changes. Useful for building
+    a new GUI package without having to rewrite the framework or delete template code.
+    Note that you will still need to edit the package, cmake, namespaces, etc to make a new package. 
+  </description>
+  <maintainer email="pgavriel@mail.middlesex.edu">Peter Gavriel</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>qt_build</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>libqt4-dev</build_depend>
+
+  <exec_depend>qt_build</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>libqt4-dev</exec_depend>
+
+</package>

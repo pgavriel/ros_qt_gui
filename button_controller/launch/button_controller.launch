@@ -1,0 +1,18 @@
+<launch>
+  <!-- Contains window paramters like position and size. -->
+  <rosparam command="load" file="$(find button_controller)/config/window_config.yaml" />
+
+  <!-- Topic to publish on -->
+  <arg name="topic" default="button_control" />
+  <!-- If true, sends the text of the button as it's message. If false, sends a shortened version that may be easier to parse. -->
+  <arg name="send_button_names" default="false" />
+  <!-- Sets the loops per second that QNode is able to publish at. May be useful depending on the robot being used. -->
+  <arg name="loop_rate" default="5" />
+
+  <node name="button_controller" pkg="button_controller" type="button_controller" output="screen">
+    <param name="topic" value="$(arg topic)" />
+    <param name="send_button_names" value="$(arg send_button_names)" />
+    <param name="loop_rate" value="$(arg loop_rate)" />
+  </node>
+
+</launch>

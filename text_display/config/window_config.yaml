@@ -4,7 +4,7 @@ window_y: 0
 window_width: 1920
 window_height: 1080
 
-font_size: 32
+font_size: 12
 
 # Colors
 text: [240,240,240]

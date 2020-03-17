@@ -4,8 +4,8 @@ This repository contains various ROS packages that are examples of functional GU
 **Quick Resources**  
 [QT Open Source Download](https://www.qt.io/download-qt-installer)  
 [QT Overview (Especially Core Internals)](https://doc.qt.io/qt-5/overviews-main.html)  
-[Qt Reference](https://doc.qt.io/qt-5/reference-overview.html)  
-[Qt Examples And Tutorials](https://doc.qt.io/qt-5/qtexamplesandtutorials.html)  
+[QT Reference](https://doc.qt.io/qt-5/reference-overview.html)  
+[QT Examples And Tutorials](https://doc.qt.io/qt-5/qtexamplesandtutorials.html)  
 
 ## Setup  
 Install all of the ROS QT packages, which likely includes some that are unnecessary, but enough of them are needed to justify doing it this way for the sake of simplicity:
@@ -63,7 +63,7 @@ The blank_slate package has all the structural code in place to implement a GUI 
 
 **To Create a new ROS GUI package:**  
 1. Design your desired GUI using QT Creator, then build the project which will generate a .ui file for you.  
-  *NOTE:* If you replace the contents of blank_slates .ui with your ui. file now, it should build and run just fine,
+  *NOTE:* If you replace the contents of blank_slates .ui with your .ui file now, it should build and run just fine,
           but if you intend to add your GUI package to the repository it's best to copy the blank_slate package first
           in order to make a new package.
 1. Make a copy of the blank_slate package and make the following changes (using the name of your new package):  

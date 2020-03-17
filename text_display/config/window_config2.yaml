@@ -1,10 +1,10 @@
 # Window Properties
-window_x: 3840
+window_x: 1000
 window_y: 0
-window_width: 1920
-window_height: 1080
+window_width: 800
+window_height: 600
 
-font_size: 75
+font_size: 24
 
 # Colors
 text: [240,240,240]

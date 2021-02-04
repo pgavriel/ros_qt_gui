@@ -1,4 +1,4 @@
-# UML ROS GUI
+# UML ROS QT GUI
 This repository contains various ROS packages that are examples of functional GUIs with the capability of communicating via ROS topics. These GUIs are written using QT, and the file structure for each package is based on the template GUI package created by [qt_create](http://wiki.ros.org/qt_create?distro=kinetic) (via *catkin_create_qt_pkg* command). The goal of this repository is to make customizable ROS GUI packages available which may be useful as they are, while also providing adequate documentation for how to implement the various features they contain. The combination of examples and documentation should enable someone who is needing a particular ROS GUI to make one by adapting the relevant pieces of example code in a relatively short time frame.  
 
 **Quick Resources**  
